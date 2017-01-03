@@ -9,9 +9,17 @@ const GameEngine = {
   player: "Red",
   board: [[],[],[],[],[],[],[]],
 
+  createEl: function(){
+    var Red = document.createElement('div');
+    Red.className = "redpiece";
+    var Blue = document.createElement('div');
+    Blue.className = "bluepiece";
+  },
+
+
   resetGame: function(){
     this.board = [[],[],[],[],[],[],[]];
-    var currentPlayer = player1;
+    var currentPlayer = player;
     this.gameOver = "false";
     viewEngine.clearFlash();
 
@@ -113,7 +121,7 @@ var viewEngine = {
         for (var j=0; j <6; j++)
       {
         if (board[i][j] === "Red") {
-          output +=  "Red";
+
         } else if (board[i][j] === "Blue") {
             output +=  "Blue";
         } else {
@@ -146,7 +154,7 @@ var viewEngine = {
    },
 
    onClickAddPiece: function(columnNumber){
-     var columnNumber = this.querySelector('data-columns');
+     var columnNumber = document.querySelectorAll('data-columns');
      var isValidMove = GameEngine.makemove(columnNumber-1);
      viewEngine.printBoard();
    }

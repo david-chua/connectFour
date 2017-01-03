@@ -8,17 +8,9 @@ h1 {
 
 }
 
-footer {
-  color: #00008B;
-  font-size: 20px;
-  text-align: center;
-  bottom: 0px;
-  width: 100%;
-  position: fixed;
-}
-
 h6 {
   text-align: center;
+  font: #00008B;
   font-size: 20px;
 }
 
@@ -28,15 +20,15 @@ h6 {
 
 #board {
   margin: auto;
-  width: 650px;
-  background: black;
+  width: 900px;
+
 }
 
-.space {
+.blank {
   background-color: white;
-  height: 50px;
-  width: 50px;
-  boarder: 5px solid black;
+  height: 80px;
+  width: 80px;
+  border: 5px solid black;
 }
 
 .column {
@@ -44,8 +36,13 @@ h6 {
 }
 
 #newgame{
-  margin: 0 auto;
-  float: right;
+  margin: 20px;
+  float: left;
+}
+
+.button {
+  font-size: 18px;
+  width: 80px;
 }
 
 .bluepiece {
