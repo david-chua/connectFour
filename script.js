@@ -6,48 +6,15 @@ ConnectFourArray = function() {
 // 0 will represent spots that has not been used by players before. A red or black will represent the players.
 const GameEngine = {
   gameover: "false",
-  player1: "Red",
-  board:
-    [
-      [0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0],
-    ],
+  player: "Red",
+  board: [[],[],[],[],[],[],[]],
 
- player1: {
-   locationX: 0,
-   locationY: 0,
-   height: 50,
-   width: 50,
-   bgColor: "Red",
-   gamePieceX: [],
-   gamePieceY: [],
- },
- player2: {
-   locationX: 0,
-   locationY: 0,
-   height: 50,
-   width: 50,
-   bgColor: "Blue",
-   gamePieceX: [],
-   gamePieceY: [],
- },
-  // var Row = board.length;
-  // var Column = board[0].length;
   resetGame: function(){
-    this.board =   [
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
-      ];
+    this.board = [[],[],[],[],[],[],[]];
     var currentPlayer = player1;
     this.gameOver = "false";
+    viewEngine.clearFlash();
+
   },
 
   toggleCurrentPlayer: function(){
@@ -58,33 +25,6 @@ const GameEngine = {
     }
   },
 
-render: function(){
-  document.getElementById('board').innerHTML= GameEngine.board;
-  for (i=0; i<GameEngine.board.length;i++) {
-    var row = document.getElementById('row');
-    for (j-0; j <GameEngine.board[0].length; j++) {
-      var column = document.getElementById('column')
-    }
-  }
-},
-
-printBoard: function(){
-  for(var i=0; i< GameEngine.board.length; i++)
-   {
-     var output="";
-      for (var j=0; j <GameEngine.board[0].length; j++)
-    {
-      if (board[i][j] === 1) {
-        output +=  "Red";
-      } else if (board[i][j] === 2) {
-          output +=  "Blue";
-      } else {
-        output += "white";
-      }
-    }
-    return output;
-    }
-},
 checkForVictory: function(){
   //vertical victory
   for (var i = 0; i < 3; i++)
@@ -134,9 +74,98 @@ checkForVictory: function(){
   }
 },
 
+makemove: function(columnNumber){
+  if(this.isValidMove(columnNumber)){
+    this.board[columnNumber].push(this.player);
+    if(this.checkForVictory(columnNumber)){
+      this.gameOver=true;
+    }
+    else {
+      this.toggleCurrentPlayer();
+    }
+    return true;
+    }
+    return false;
+  },
+
+isValidMove: function(columnNumber){
+  if (!GameEngine.gameOver){
+    if(!GameEngine.board.length || GameEngine.board[0].length <6) {
+      viewEngine.clearFlash();
+      return true;
+    }
+    viewEngine.flashMessage("Choose a different move.");
+    return false;
+  }
+  if (GameEngine.player == "Red"){
+    viewEngine.flashMessage("Red player has won!");
+  }
+  else{
+    viewEngine.flashMessage("Blue player has won!");
+  }
+  return false;
 }
-window.printBoard = printBoard;
 }
+
+var viewEngine = {
+  printBoard: function(){
+    for(var i=0; i< GameEngine.board.length; i++){
+        for (var j=0; j <6; j++)
+      {
+        if (board[i][j] === "Red") {
+          output +=  "Red";
+        } else if (board[i][j] === "Blue") {
+            output +=  "Blue";
+        } else {
+          output += "white";
+        }
+      }
+      }
+      return output;
+    },
+
+    flashMessage: function(){
+      document.getElementsByClassName('flash-msg').innerHTML("message");
+      var sheet = document.createElement('style')
+      sheet.innerHTML = "div {display: block;}";
+      document.body.appendChild(sheet);
+    },
+
+    clearFlash: function(){
+      document.getElementsByClassName('flash-msg').innerHTML("");
+      var sheets = document.createElement('style')
+      sheets.innerHTML = "div {display: block;}";
+      document.body.appendChild(sheets);
+    }
+  }
+
+ var gameController = {
+   StartNewGame: function(){
+     GameEngine.resetGame();
+     viewEngine.printBoard();
+   },
+
+   onClickAddPiece: function(columnNumber){
+     var columnNumber = this.querySelector('data-columns');
+     var isValidMove = GameEngine.makemove(columnNumber-1);
+     viewEngine.printBoard();
+   }
+ }
+}
+
+window.onload = function(){
+  var el = document.getElementById("newgame");
+  if (el) {
+  addEventListener("click", function(){
+    gameController.StartNewGame();
+  })};
+  var els = document.getElementsByClassName("movepiece");
+  if (els) {
+  addEventListener("click", function(){
+   gameController.onClickAddPiece();
+ })};
+}
+
 
 
 
